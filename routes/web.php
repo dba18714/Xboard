@@ -89,3 +89,15 @@ Route::get('/' . admin_setting('secure_path', admin_setting('frontend_admin_path
 Route::get('/' . (admin_setting('subscribe_path', 's')) . '/{token}', [\App\Http\Controllers\V1\Client\ClientController::class, 'subscribe'])
     ->middleware('client')
     ->name('client.subscribe');
+
+// Telegram Bot 路由
+Route::prefix('telegram')->group(function () {
+    // 基础回声机器人
+    Route::post('/webhook', [\App\Http\Controllers\TelegramBotController::class, 'webhook']);
+    Route::get('/set-webhook', [\App\Http\Controllers\TelegramBotController::class, 'setWebhook']);
+    Route::get('/webhook-info', [\App\Http\Controllers\TelegramBotController::class, 'getWebhookInfo']);
+    Route::get('/delete-webhook', [\App\Http\Controllers\TelegramBotController::class, 'deleteWebhook']);
+
+    // 高级机器人（如果要使用高级版本，请将上面的 webhook 路由注释掉，启用下面这行）
+    // Route::post('/webhook', [\App\Http\Controllers\AdvancedTelegramBotController::class, 'webhook']);
+});
