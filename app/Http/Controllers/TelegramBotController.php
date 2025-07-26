@@ -7,15 +7,10 @@ use Illuminate\Http\Response;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use Illuminate\Support\Facades\Log;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramBotController extends Controller
 {
-    protected $telegram;
-
-    public function __construct()
-    {
-        $this->telegram = new Api(config('telegram.bot_token'));
-    }
 
     /**
      * 处理 Telegram webhook
@@ -26,8 +21,7 @@ class TelegramBotController extends Controller
         
         try {
             // 获取更新
-            $update = $this->telegram->getWebhookUpdate();
-
+            $update = Telegram::getWebhookUpdates();
             
             // 记录接收到的更新
             Log::info('Telegram update received', ['update' => $update]);
@@ -69,41 +63,6 @@ class TelegramBotController extends Controller
             
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
-
-        try {
-            $update = $this->telegram->getWebhookUpdate();
-
-            Log::info('Telegram Bot Webhook', [
-                'update' => $update
-            ]);
-            
-            // 检查是否有消息
-            if ($update->getMessage()) {
-                $message = $update->getMessage();
-                $chatId = $message->getChat()->getId();
-                $text = $message->getText();
-                
-                // 如果是 /start 命令
-                if ($text === '/start') {
-                    $this->telegram->sendMessage([
-                        'chat_id' => $chatId,
-                        'text' => '你好！我是一个回声机器人。发送任何消息给我，我会重复你说的话。'
-                    ]);
-                } else {
-                    // 回声功能 - 重复用户发送的消息
-                    $this->telegram->sendMessage([
-                        'chat_id' => $chatId,
-                        'text' => "你说：" . $text
-                    ]);
-                }
-            }
-            
-            return response('OK', 200);
-            
-        } catch (TelegramSDKException $e) {
-            \Log::error('Telegram Bot Error: ' . $e->getMessage());
-            return response('Error', 500);
-        }
     }
 
     /**
@@ -114,7 +73,7 @@ class TelegramBotController extends Controller
         try {
             $webhookUrl = config('app.url') . '/telegram/webhook';
             
-            $response = $this->telegram->setWebhook([
+            $response = Telegram::setWebhook([
                 'url' => $webhookUrl
             ]);
             
@@ -146,7 +105,7 @@ class TelegramBotController extends Controller
     public function getWebhookInfo()
     {
         try {
-            $webhookInfo = $this->telegram->getWebhookInfo();
+            $webhookInfo = Telegram::getWebhookInfo();
             
             return response()->json([
                 'success' => true,
@@ -167,7 +126,7 @@ class TelegramBotController extends Controller
     public function deleteWebhook()
     {
         try {
-            $response = $this->telegram->deleteWebhook();
+            $response = Telegram::deleteWebhook();
             
             return response()->json([
                 'success' => true,
