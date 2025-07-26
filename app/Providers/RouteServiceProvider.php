@@ -24,9 +24,10 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        if (admin_setting('force_https')) {
-            resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
-        }
+        // 注释掉数据库相关调用，避免在没有数据库的情况下出错
+        // if (admin_setting('force_https')) {
+        //     resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
+        // }
 
         parent::boot();
     }

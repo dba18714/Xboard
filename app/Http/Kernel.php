@@ -20,7 +20,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\InitializePlugins::class,
+        // 注释掉插件初始化中间件，避免在没有数据库的情况下出错
+        // \App\Http\Middleware\InitializePlugins::class,
     ];
 
     /**
