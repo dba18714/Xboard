@@ -66,6 +66,7 @@ class TelegramBotController extends Controller
             ]);
             
             if ($response) {
+                return $response;
                 return response()->json([
                     'success' => true,
                     'message' => 'Webhook 设置成功',
