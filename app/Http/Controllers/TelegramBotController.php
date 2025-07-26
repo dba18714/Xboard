@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
+use Illuminate\Support\Facades\Log;
 
 class TelegramBotController extends Controller
 {
@@ -23,6 +24,10 @@ class TelegramBotController extends Controller
     {
         try {
             $update = $this->telegram->getWebhookUpdate();
+
+            Log::info('Telegram Bot Webhook', [
+                'update' => $update
+            ]);
             
             // 检查是否有消息
             if ($update->getMessage()) {
@@ -66,9 +71,9 @@ class TelegramBotController extends Controller
             ]);
             
             if ($response) {
-                return $response;
                 return response()->json([
                     'success' => true,
+                    'response' => $response,
                     'message' => 'Webhook 设置成功',
                     'webhook_url' => $webhookUrl
                 ]);
