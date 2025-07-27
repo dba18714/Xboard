@@ -1,6 +1,8 @@
 services:
   web:
     build: .
+    volumes:
+      - app:/www/app
     ports:
       - "8080:7001"
     environment:
