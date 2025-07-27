@@ -14,6 +14,8 @@ RUN CFLAGS="-O0" install-php-extensions pcntl && \
 
 WORKDIR /www
 
+VOLUME ["/app/data", "/tmp/telegram-bot-api"]
+
 COPY . .
 
 # # Add build arguments
