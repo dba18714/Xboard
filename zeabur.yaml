@@ -1,0 +1,20 @@
+services:
+  my-app:
+    build: .
+    volumes:
+      - type: volume
+        source: app-data
+        target: /app/data
+      - type: volume  
+        source: logs
+        target: /var/log
+    environment:
+      - DATABASE_URL=postgresql://...
+    ports:
+      - "3000:3000"
+
+volumes:
+  app-data:
+    driver: local
+  logs:
+    driver: local
