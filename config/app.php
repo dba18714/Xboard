@@ -175,7 +175,7 @@ return [
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         // App\Providers\SettingServiceProvider::class,
-        App\Providers\OctaneServiceProvider::class,
+        // App\Providers\OctaneServiceProvider::class,
         // App\Providers\PluginServiceProvider::class,
         App\Providers\ProtocolServiceProvider::class,
 
